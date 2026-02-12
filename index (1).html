@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Be My Valentine?</title>
+  <style>
+    body {
+      background-color: #ffe6f0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+      overflow-x: hidden;
+      position: relative;
+    }
+    h1 {
+      color: #ff3366;
+      font-size: 2em;
+      margin-bottom: 20px;
+      line-height: 1.3;
+    }
+    .gif-container img {
+      width: 100%;
+      max-width: 350px;
+      height: auto;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(255, 51, 102, 0.6);
+      transition: all 0.5s ease;
+    }
+    .button {
+      display: inline-block;
+      margin: 15px;
+      padding: 12px 24px;
+      font-size: 1em;
+      color: white;
+      background-color: #ff3366;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: transform 0.3s, background-color 0.3s;
+      position: relative;
+    }
+    .button:hover {
+      transform: scale(1.1);
+      background-color: #ff6699;
+    }
+
+    #backButton {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      padding: 8px 16px;
+      font-size: 0.9em;
+      background-color: #ff3366;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      display: none;
+      z-index: 1000;
+    }
+
+    .heart {
+      position: fixed;
+      font-size: 22px;
+      animation: floatUp 3s linear forwards;
+      pointer-events: none;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-200px); opacity: 0; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>💖 Will you be my Valentine? 💖</h1>
+
+  <div class="gif-container">
+    <img id="mainGif" src="https://media.giphy.com/media/wvYNSqBAMDVx8CEYkt/giphy.gif" alt="Cute cat">
+  </div>
+
+  <button id="yesButton" class="button" onclick="sayYes()">Yes! 💕</button>
+  <button id="noButton" class="button" onclick="sayNo()">No 😢</button>
+  <button id="backButton" onclick="restartPage()">⬅ Back</button>
+
+<script>
+  let noClicks = 0;
+  let yesScale = 1;
+
+  function releaseHearts() {
+    for (let i = 0; i < 20; i++) {
+      let heart = document.createElement("div");
+      heart.className = "heart";
+      heart.innerHTML = "💖";
+      heart.style.left = Math.random() * window.innerWidth + "px";
+      heart.style.top = window.innerHeight - 50 + "px";
+      document.body.appendChild(heart);
+
+      setTimeout(() => {
+        heart.remove();
+      }, 3000);
+    }
+  }
+
+  function sayYes() {
+    releaseHearts();
+    let mainGif = document.getElementById("mainGif");
+    mainGif.src = "https://media.giphy.com/media/T70hpBP1L0N7U0jtkq/giphy.gif";
+
+    document.getElementById("yesButton").style.display = "none";
+    document.getElementById("noButton").style.display = "none";
+    document.getElementById("backButton").style.display = "block";
+  }
+
+  function sayNo() {
+    noClicks++;
+
+    let mainGif = document.getElementById("mainGif");
+    let noButton = document.getElementById("noButton");
+    let yesButton = document.getElementById("yesButton");
+
+    mainGif.src = "https://media.giphy.com/media/CM1rHbKDMH2BW/giphy.gif";
+
+    // YES button grows every click
+    yesScale += 0.5;
+    yesButton.style.transform = "scale(" + yesScale + ")";
+
+    if (noClicks < 6) {
+      // Random position every click
+      let randomLeft = Math.random() * (window.innerWidth - 150);
+      let randomTop = Math.random() * (window.innerHeight - 150);
+
+      noButton.style.position = "fixed";
+      noButton.style.left = randomLeft + "px";
+      noButton.style.top = randomTop + "px";
+
+      // Change NO size every click
+      let newSize = 1 - (noClicks * 0.15);
+      noButton.style.transform = "scale(" + newSize + ")";
+    } else {
+      // Disappear on 6th click
+      noButton.style.display = "none";
+    }
+  }
+
+  function restartPage() {
+    location.reload();
+  }
+</script>
+
+</body>
+</html>
